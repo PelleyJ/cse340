@@ -1,6 +1,252 @@
-/******* Change Box Model ***************/
+/*********** Change Box Model ***********/
 *,
-*:before,
-*:after {
+*::before,
+*::after {
   box-sizing: border-box;
+}
+
+/*********** Base ***********/
+:root {
+  --bg: #ffffff;
+  --text: #111827;
+  --muted: #4b5563;
+
+  --nav-bg: #1f2937;
+  --nav-text: #ffffff;
+
+  --accent: #0b76b7;      /* link/button color */
+  --accent-dark: #075a8a; /* hover */
+
+  --panel: #e6f3fb;       /* light blue panel background for upgrades */
+  --border: #d1d5db;
+
+  --max: 960px;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.4;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+a {
+  color: var(--accent);
+}
+
+a:hover,
+a:focus-visible {
+  color: var(--accent-dark);
+}
+
+#wrapper {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 1rem 1.5rem;
+}
+
+/*********** Header ***********/
+#top-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0 0.75rem;
+}
+
+#top-header .siteName a {
+  text-decoration: none;
+  color: var(--text);
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+#tools a {
+  text-decoration: none;
+  color: var(--text);
+  font-size: 0.95rem;
+}
+
+#tools a:hover,
+#tools a:focus-visible {
+  text-decoration: underline;
+}
+
+/*********** Navigation ***********/
+nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0.65rem 0.75rem;
+  display: flex;
+  gap: 1.25rem;
+  background: var(--nav-bg);
+}
+
+nav a {
+  color: var(--nav-text);
+  text-decoration: none;
+  font-weight: 600;
+  padding: 0.25rem 0.15rem;
+}
+
+nav a[aria-current="page"] {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+nav a:hover,
+nav a:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/*********** Main content ***********/
+main {
+  padding-top: 1rem;
+}
+
+/* Hero */
+.hero h1 {
+  margin: 0 0 0.75rem;
+  font-size: 1.6rem;
+}
+
+.hero-card {
+  position: relative;
+}
+
+.hero-features {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  max-width: 18rem;
+}
+
+.hero-features li a,
+.hero-features li {
+  font-weight: 700;
+}
+
+.hero-features li a {
+  text-decoration: underline;
+}
+
+.hero-button {
+  display: inline-block;
+  margin-top: 0.75rem;
+  background: var(--accent);
+  color: #fff;
+  text-decoration: none;
+  padding: 0.55rem 1rem;
+  font-weight: 700;
+  border-radius: 2px;
+}
+
+.hero-button:hover,
+.hero-button:focus-visible {
+  background: var(--accent-dark);
+  color: #fff;
+}
+
+/* Delorean image on mobile sits below */
+.hero-image {
+  margin-top: 1rem;
+}
+
+/*********** Lower sections ***********/
+.lower {
+  margin-top: 2rem;
+}
+
+/* Headings similar weight/size */
+.section-title {
+  font-size: 1.35rem;
+  margin: 0 0 0.75rem;
+}
+
+/* Reviews */
+.reviews ul {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.reviews li {
+  margin-bottom: 0.75rem;
+}
+
+/* Upgrades grid */
+.upgrades-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.upgrade-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  padding: 0.75rem;
+  text-align: center;
+}
+
+.upgrade-card img {
+  margin: 0 auto 0.5rem;
+  max-height: 90px;
+  object-fit: contain;
+}
+
+.upgrade-card a {
+  font-weight: 700;
+}
+
+/*********** Footer ***********/
+footer {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+/*********** Large Screen (one media query) ***********/
+@media screen and (min-width: 768px) {
+  #wrapper {
+    padding: 0 1.25rem 2rem;
+  }
+
+  /* Hero becomes 2 columns */
+  .hero-card {
+    display: grid;
+    grid-template-columns: 1fr 1.25fr;
+    gap: 1.5rem;
+    align-items: center;
+  }
+
+  .hero-image {
+    margin-top: 0;
+    justify-self: end;
+  }
+
+  /* Lower becomes 2 columns */
+  .lower {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  /* In the screenshot, reviews often appear on the right */
+  .upgrades {
+    order: 1;
+  }
+
+  .reviews {
+    order: 2;
+  }
 }
