@@ -203,6 +203,7 @@ main {
 
 .upgrade-card a {
   font-weight: 700;
+  color: var(--accent-dark); /* fixes WAVE contrast error */
 }
 
 /*********** Footer ***********/
