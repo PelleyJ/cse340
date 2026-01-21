@@ -251,3 +251,60 @@ footer {
     order: 2;
   }
 }
+
+/* Inventory display grid */
+#inv-display {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+#inv-display li {
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #fff;
+}
+
+#inv-display img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+#inv-display .namePrice {
+  padding: 0.75rem;
+}
+
+#inv-display .namePrice h2 {
+  margin: 0.5rem 0;
+  font-size: 1.1rem;
+}
+
+#inv-display .namePrice span {
+  display: inline-block;
+  font-weight: bold;
+  margin-top: 0.25rem;
+}
+
+.notice {
+  padding: 1rem;
+  font-style: italic;
+}
+
+/* Responsive layout */
+@media (min-width: 600px) {
+  #inv-display {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 900px) {
+  #inv-display {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
