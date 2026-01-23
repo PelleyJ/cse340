@@ -308,3 +308,26 @@ footer {
     grid-template-columns: repeat(3, 1fr);
   }
 }
+
+.vehicle-detail {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+.vehicle-detail__image img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.vehicle-detail__price {
+  font-size: 1.2rem;
+}
+
+@media (min-width: 768px) {
+  .vehicle-detail {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
+}

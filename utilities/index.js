@@ -2,6 +2,16 @@ const invModel = require("../models/inventory-model")
 const Util = {}
 
 /* ************************
+ * Middleware For Handling Errors
+ * Wraps async route/controller functions so errors go to Express error handler
+ ************************** */
+Util.handleErrors = function (fn) {
+  return function (req, res, next) {
+    Promise.resolve(fn(req, res, next)).catch(next)
+  }
+}
+
+/* ************************
  * Constructs the nav HTML unordered list
  ************************** */
 Util.getNav = async function (req, res, next) {
@@ -75,6 +85,37 @@ Util.buildClassificationGrid = async function (data) {
     grid = '<p class="notice">Sorry, no matching vehicles could be found.</p>'
   }
   return grid
+}
+
+/* **************************************
+ * Build the vehicle detail view HTML
+ * ************************************ */
+Util.buildVehicleDetail = async function (data) {
+  const price = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  }).format(data.inv_price)
+
+  const miles = new Intl.NumberFormat("en-US").format(data.inv_miles)
+
+  return `
+    <section class="vehicle-detail">
+      <div class="vehicle-detail__image">
+        <img src="${data.inv_image}" alt="${data.inv_year} ${data.inv_make} ${data.inv_model}">
+      </div>
+
+      <div class="vehicle-detail__info">
+        <h2>${data.inv_year} ${data.inv_make} ${data.inv_model}</h2>
+
+        <p class="vehicle-detail__price"><strong>Price:</strong> ${price}</p>
+        <p><strong>Mileage:</strong> ${miles} miles</p>
+        <p><strong>Color:</strong> ${data.inv_color}</p>
+
+        <h3>Description</h3>
+        <p>${data.inv_description}</p>
+      </div>
+    </section>
+  `
 }
 
 module.exports = Util
