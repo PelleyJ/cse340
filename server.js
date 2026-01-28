@@ -35,6 +35,28 @@ app.get("/", baseController.buildHome)
 app.use("/inv", inventoryRoute)
 
 /* ***********************
+ * 404 Handler (must be AFTER all routes)
+ * *********************** */
+app.use((req, res, next) => {
+  res.status(404).render("errors/error", {
+    title: "404 - Page Not Found",
+    message: "Sorry, we couldn’t find that page.",
+  })
+})
+
+/* ***********************
+ * Express Error Handler (must have 4 params)
+ * *********************** */
+app.use((err, req, res, next) => {
+  console.error(err)
+
+  res.status(err.status || 500).render("errors/error", {
+    title: err.status ? `${err.status} Error` : "500 - Server Error",
+    message: err.message || "Something went wrong.",
+  })
+})
+
+/* ***********************
  * Local Server Information
  * Values from .env (environment) file
  * *********************** */
