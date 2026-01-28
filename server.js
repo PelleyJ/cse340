@@ -36,24 +36,34 @@ app.use("/inv", inventoryRoute)
 
 /* ***********************
  * 404 Handler (must be AFTER all routes)
+ * (Send to error handler middleware)
  * *********************** */
 app.use((req, res, next) => {
-  res.status(404).render("errors/error", {
-    title: "404 - Page Not Found",
-    message: "Sorry, we couldn’t find that page.",
-  })
+  const err = new Error("Sorry, we couldn’t find that page.")
+  err.status = 404
+  next(err)
 })
 
 /* ***********************
  * Express Error Handler (must have 4 params)
+ * Adds nav so layout/partials don't crash
  * *********************** */
-app.use((err, req, res, next) => {
+app.use(async (err, req, res, next) => {
   console.error(err)
 
-  res.status(err.status || 500).render("errors/error", {
-    title: err.status ? `${err.status} Error` : "500 - Server Error",
-    message: err.message || "Something went wrong.",
-  })
+  try {
+    const utilities = require("./utilities/")
+    const nav = await utilities.getNav()
+
+    res.status(err.status || 500).render("errors/error", {
+      title: err.status ? `${err.status} Error` : "500 - Server Error",
+      nav,
+      message: err.message || "Something went wrong.",
+    })
+  } catch (renderErr) {
+    // If rendering the error page fails, fall back to plain text
+    res.status(500).send("Server error.")
+  }
 })
 
 /* ***********************
