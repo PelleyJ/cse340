@@ -14,10 +14,10 @@
   --nav-bg: #1f2937;
   --nav-text: #ffffff;
 
-  --accent: #0b76b7;      /* link/button color */
-  --accent-dark: #075a8a; /* hover */
+  --accent: #0b76b7;
+  --accent-dark: #075a8a;
 
-  --panel: #e6f3fb;       /* light blue panel background for upgrades */
+  --panel: #e6f3fb;
   --border: #d1d5db;
 
   --max: 960px;
@@ -65,7 +65,6 @@ a:focus-visible {
   color: var(--text);
   font-size: 2rem;
   font-weight: 700;
-  letter-spacing: 0.5px;
 }
 
 #tools a {
@@ -93,28 +92,23 @@ nav a {
   color: var(--nav-text);
   text-decoration: none;
   font-weight: 600;
-  padding: 0.25rem 0.15rem;
 }
 
-nav a[aria-current="page"] {
-  text-decoration: underline;
-  text-underline-offset: 4px;
-}
-
+nav a[aria-current="page"],
 nav a:hover,
 nav a:focus-visible {
   text-decoration: underline;
   text-underline-offset: 4px;
 }
 
-/*********** Main content ***********/
+/*********** Main ***********/
 main {
   padding-top: 1rem;
 }
 
-/* Hero */
+/*********** Hero ***********/
 .hero h1 {
-  margin: 0 0 0.75rem;
+  margin-bottom: 0.75rem;
   font-size: 1.6rem;
 }
 
@@ -123,19 +117,14 @@ main {
 }
 
 .hero-features {
-  margin: 0;
-  padding: 0;
   list-style: none;
+  padding: 0;
   max-width: 18rem;
 }
 
-.hero-features li a,
-.hero-features li {
+.hero-features li,
+.hero-features a {
   font-weight: 700;
-}
-
-.hero-features li a {
-  text-decoration: underline;
 }
 
 .hero-button {
@@ -143,37 +132,27 @@ main {
   margin-top: 0.75rem;
   background: var(--accent);
   color: #fff;
-  text-decoration: none;
   padding: 0.55rem 1rem;
   font-weight: 700;
   border-radius: 2px;
 }
 
-.hero-button:hover,
-.hero-button:focus-visible {
+.hero-button:hover {
   background: var(--accent-dark);
-  color: #fff;
 }
 
-/* Delorean image on mobile sits below */
-.hero-image {
-  margin-top: 1rem;
-}
-
-/*********** Lower sections ***********/
+/*********** Lower Sections ***********/
 .lower {
   margin-top: 2rem;
 }
 
-/* Headings similar weight/size */
 .section-title {
   font-size: 1.35rem;
-  margin: 0 0 0.75rem;
+  margin-bottom: 0.75rem;
 }
 
-/* Reviews */
+/*********** Reviews ***********/
 .reviews ul {
-  margin: 0;
   padding-left: 1.25rem;
 }
 
@@ -181,7 +160,7 @@ main {
   margin-bottom: 0.75rem;
 }
 
-/* Upgrades grid */
+/*********** Upgrades ***********/
 .upgrades-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -198,12 +177,11 @@ main {
 .upgrade-card img {
   margin: 0 auto 0.5rem;
   max-height: 90px;
-  object-fit: contain;
 }
 
 .upgrade-card a {
   font-weight: 700;
-  color: var(--accent-dark); /* fixes WAVE contrast error */
+  color: var(--accent-dark);
 }
 
 /*********** Footer ***********/
@@ -215,80 +193,18 @@ footer {
   font-size: 0.9rem;
 }
 
-/*********** Large Screen (one media query) ***********/
-@media screen and (min-width: 768px) {
-  #wrapper {
-    padding: 0 1.25rem 2rem;
-  }
-
-  /* Hero becomes 2 columns */
-  .hero-card {
-    display: grid;
-    grid-template-columns: 1fr 1.25fr;
-    gap: 1.5rem;
-    align-items: center;
-  }
-
-  .hero-image {
-    margin-top: 0;
-    justify-self: end;
-  }
-
-  /* Lower becomes 2 columns */
-  .lower {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem;
-    align-items: start;
-  }
-
-  /* In the screenshot, reviews often appear on the right */
-  .upgrades {
-    order: 1;
-  }
-
-  .reviews {
-    order: 2;
-  }
-}
-
-/* Inventory display grid */
+/*********** Inventory ***********/
 #inv-display {
   list-style: none;
-  margin: 0;
   padding: 0;
-
   display: grid;
-  grid-template-columns: 1fr;
   gap: 1rem;
 }
 
 #inv-display li {
   border: 1px solid #ccc;
   border-radius: 6px;
-  overflow: hidden;
   background: #fff;
-}
-
-#inv-display img {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-
-#inv-display .namePrice {
-  padding: 0.75rem;
-}
-
-#inv-display .namePrice h2 {
-  margin: 0.5rem 0;
-  font-size: 1.1rem;
-}
-
-#inv-display .namePrice span {
-  display: inline-block;
-  font-weight: bold;
-  margin-top: 0.25rem;
 }
 
 .notice {
@@ -296,7 +212,85 @@ footer {
   font-style: italic;
 }
 
-/* Responsive layout */
+/*********** Vehicle Detail ***********/
+.vehicle-detail {
+  display: grid;
+  gap: 1rem;
+}
+
+.vehicle-detail__price {
+  font-size: 1.2rem;
+}
+
+/*********** Login & Register (Shared) ***********/
+.account-login,
+.account-register {
+  max-width: 520px;
+  margin: 1rem auto;
+  padding: 1.25rem;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(0,0,0,0.12);
+  background: rgba(0,0,0,0.03);
+}
+
+.login-form,
+.register-form {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.login-form label,
+.register-form label {
+  font-weight: 600;
+}
+
+.login-form input,
+.register-form input {
+  padding: 0.6rem 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(0,0,0,0.25);
+  font-size: 1rem;
+}
+
+.login-form button,
+.register-form button {
+  margin-top: 0.75rem;
+  padding: 0.65rem 1rem;
+  border: 0;
+  border-radius: 0.5rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.password-rules {
+  font-size: 0.95rem;
+  opacity: 0.85;
+}
+
+.account-login-link,
+.account-register {
+  margin-top: 1rem;
+}
+
+/*********** Media Queries ***********/
+@media (min-width: 768px) {
+  .hero-card {
+    display: grid;
+    grid-template-columns: 1fr 1.25fr;
+    gap: 1.5rem;
+  }
+
+  .lower {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+
+  .vehicle-detail {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
 @media (min-width: 600px) {
   #inv-display {
     grid-template-columns: repeat(2, 1fr);
@@ -306,28 +300,5 @@ footer {
 @media (min-width: 900px) {
   #inv-display {
     grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-.vehicle-detail {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1rem;
-}
-
-.vehicle-detail__image img {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-
-.vehicle-detail__price {
-  font-size: 1.2rem;
-}
-
-@media (min-width: 768px) {
-  .vehicle-detail {
-    grid-template-columns: 1fr 1fr;
-    align-items: start;
   }
 }
