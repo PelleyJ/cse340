@@ -2,8 +2,16 @@
 
 <%- messages() %>
 
+<% if (errors) { %>
+  <ul class="notice">
+    <% errors.array().forEach(error => { %>
+      <li><%= error.msg %></li>
+    <% }) %>
+  </ul>
+<% } %>
+
 <section class="account-login">
-  <form class="login-form" action="/account/login" method="post">
+  <form class="login-form" id="loginForm" action="/account/login" method="post">
     <label for="account_email">Email</label>
     <input
       type="email"
@@ -12,14 +20,15 @@
       required
       autocomplete="email"
       placeholder="name@example.com"
+      value="<%= locals.account_email %>"
     >
 
     <label for="account_password">Password</label>
 
-    <div class="password-rules">
+    <p class="password-rules">
       Password must be at least 12 characters and contain at least 1 uppercase letter,
       1 lowercase letter, 1 number, and 1 special character.
-    </div>
+    </p>
 
     <input
       type="password"
@@ -27,14 +36,14 @@
       name="account_password"
       required
       autocomplete="current-password"
-      pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{12,}$"
       placeholder="Enter your password"
+      pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{12,}$"
     >
 
     <button type="submit">Login</button>
-  </form>
 
-  <p class="account-register">
-    No account? <a href="/account/register">Sign-up</a>
-  </p>
+    <div class="account-register">
+      <p>No account? <a href="/account/register">Sign-up</a></p>
+    </div>
+  </form>
 </section>

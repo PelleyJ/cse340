@@ -302,3 +302,8 @@ footer {
     grid-template-columns: repeat(3, 1fr);
   }
 }
+
+.errors {
+  list-style: disc;
+  padding-left: 1.5rem;
+}
