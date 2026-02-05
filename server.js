@@ -12,6 +12,9 @@ require("dotenv").config()
 const session = require("express-session")
 const pool = require("./database/")
 const bodyParser = require("body-parser")
+const cookieParser = require("cookie-parser")
+
+const utilities = require("./utilities/")
 
 const app = express()
 
@@ -47,6 +50,12 @@ app.use(function (req, res, next) {
 // Body Parser Middleware
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
+
+// Cookie Parser Middleware
+app.use(cookieParser())
+
+// JWT Check Middleware (applies to ALL routes)
+app.use(utilities.checkJWTToken)
 
 /* ***********************
  * View Engine and Templates
@@ -87,7 +96,6 @@ app.use(async (err, req, res, next) => {
   console.error(err)
 
   try {
-    const utilities = require("./utilities/")
     const nav = await utilities.getNav()
 
     res.status(err.status || 500).render("errors/error", {

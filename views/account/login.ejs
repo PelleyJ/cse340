@@ -2,7 +2,7 @@
 
 <%- messages() %>
 
-<% if (errors) { %>
+<% if (errors && errors.array) { %>
   <ul class="notice">
     <% errors.array().forEach(error => { %>
       <li><%= error.msg %></li>
@@ -20,7 +20,7 @@
       required
       autocomplete="email"
       placeholder="name@example.com"
-      value="<%= locals.account_email %>"
+      value="<%= typeof account_email !== 'undefined' ? account_email : '' %>"
     >
 
     <label for="account_password">Password</label>
@@ -37,7 +37,6 @@
       required
       autocomplete="current-password"
       placeholder="Enter your password"
-      pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{12,}$"
     >
 
     <button type="submit">Login</button>
