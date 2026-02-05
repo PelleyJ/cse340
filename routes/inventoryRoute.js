@@ -51,6 +51,22 @@ router.post(
   utilities.handleErrors(invController.updateInventory)
 )
 
+/* ***************************
+ * Delete confirmation view
+ * ************************** */
+router.get(
+  "/delete/:inv_id",
+  utilities.handleErrors(invController.buildDeleteConfirm)
+)
+
+/* ***************************
+ * Process delete inventory
+ * ************************** */
+router.post(
+  "/delete/",
+  utilities.handleErrors(invController.deleteInventory)
+)
+
 // Inventory by classification
 router.get(
   "/type/:classificationId",
