@@ -12,7 +12,9 @@ validate.classificationRules = () => {
       .notEmpty()
       .withMessage("Classification name is required.")
       .isAlphanumeric()
-      .withMessage("Classification name must contain only letters and numbers (no spaces or symbols).")
+      .withMessage(
+        "Classification name must contain only letters and numbers (no spaces or symbols)."
+      )
       .isLength({ min: 1, max: 30 })
       .withMessage("Classification name must be 1–30 characters."),
   ]
@@ -82,7 +84,9 @@ validate.inventoryRules = () => {
       .notEmpty()
       .withMessage("Thumbnail path is required.")
       .matches(/^\/images\/vehicles\/.+\.(png|jpg|jpeg|webp)$/i)
-      .withMessage("Thumbnail path must look like /images/vehicles/filename.png"),
+      .withMessage(
+        "Thumbnail path must look like /images/vehicles/filename.png"
+      ),
 
     body("inv_price")
       .notEmpty()
@@ -110,7 +114,9 @@ validate.inventoryRules = () => {
 validate.checkInventoryData = async (req, res, next) => {
   const errors = validationResult(req)
   const nav = await utilities.getNav()
-  const classificationList = await utilities.buildClassificationList(req.body.classification_id)
+  const classificationList = await utilities.buildClassificationList(
+    req.body.classification_id
+  )
 
   if (!errors.isEmpty()) {
     return res.render("inventory/add-inventory", {
@@ -120,6 +126,43 @@ validate.checkInventoryData = async (req, res, next) => {
       errors: errors.array(),
 
       // Sticky values
+      classification_id: req.body.classification_id,
+      inv_make: req.body.inv_make,
+      inv_model: req.body.inv_model,
+      inv_year: req.body.inv_year,
+      inv_description: req.body.inv_description,
+      inv_image: req.body.inv_image,
+      inv_thumbnail: req.body.inv_thumbnail,
+      inv_price: req.body.inv_price,
+      inv_miles: req.body.inv_miles,
+      inv_color: req.body.inv_color,
+    })
+  }
+
+  next()
+}
+
+/* ******************************
+ * Check data and return errors for Update Inventory
+ * Redirects back to the edit view
+ * ***************************** */
+validate.checkUpdateData = async (req, res, next) => {
+  const errors = validationResult(req)
+  const nav = await utilities.getNav()
+  const classificationSelect = await utilities.buildClassificationList(
+    req.body.classification_id
+  )
+  const itemName = `${req.body.inv_make} ${req.body.inv_model}`
+
+  if (!errors.isEmpty()) {
+    return res.render("inventory/edit-inventory", {
+      title: "Edit " + itemName,
+      nav,
+      classificationSelect,
+      errors: errors.array(),
+
+      // Sticky values (includes inv_id)
+      inv_id: req.body.inv_id,
       classification_id: req.body.classification_id,
       inv_make: req.body.inv_make,
       inv_model: req.body.inv_model,

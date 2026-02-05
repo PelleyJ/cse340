@@ -1,10 +1,13 @@
-<%- messages() %>
-
 <h1><%= title %></h1>
 
-<p>Use the links below to manage classifications and inventory.</p>
+<p>Select a classification from the list to see the items belonging to the classification.</p>
 
-<ul>
-  <li><a href="/inv/add-classification">Add New Classification</a></li>
-  <li><a href="/inv/add-inventory">Add New Inventory Item</a></li>
-</ul>
+<%- classificationSelect %>
+
+<h2>Manage Inventory</h2>
+
+<table id="inventoryDisplay"></table>
+
+<noscript>JavaScript must be enabled to use this page.</noscript>
+
+<script src="../../js/inventory.js"></script>
