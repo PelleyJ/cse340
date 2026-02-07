@@ -6,7 +6,6 @@ const Util = {}
 
 /* ************************
  * Middleware For Handling Errors
- * Wraps async route/controller functions so errors go to Express error handler
  ************************** */
 Util.handleErrors = function (fn) {
   return function (req, res, next) {
@@ -20,7 +19,11 @@ Util.handleErrors = function (fn) {
 Util.getNav = async function (req, res, next) {
   let data = await invModel.getClassifications()
   let list = "<ul>"
+
+  // Home link
   list += '<li><a href="/" title="Home page">Home</a></li>'
+
+  // Classification links
   data.rows.forEach((row) => {
     list += "<li>"
     list +=
@@ -33,6 +36,15 @@ Util.getNav = async function (req, res, next) {
       "</a>"
     list += "</li>"
   })
+
+  // Account links 
+  if (res && res.locals && res.locals.loggedin) {
+    list += `<li><a href="/account/">Welcome ${res.locals.accountData.account_firstname}</a></li>`
+    list += `<li><a href="/account/logout">Logout</a></li>`
+  } else {
+    list += `<li><a href="/account/login">My Account</a></li>`
+  }
+
   list += "</ul>"
   return list
 }
@@ -151,6 +163,10 @@ Util.buildVehicleDetail = async function (data) {
  * Middleware to check token validity
  **************************************** */
 Util.checkJWTToken = (req, res, next) => {
+  // defaults so views always have values
+  res.locals.loggedin = 0
+  res.locals.accountData = null
+
   if (req.cookies && req.cookies.jwt) {
     jwt.verify(
       req.cookies.jwt,
@@ -181,6 +197,24 @@ Util.checkLogin = (req, res, next) => {
     req.flash("notice", "Please log in.")
     return res.redirect("/account/login")
   }
+}
+
+/* ****************************************
+ *  Check Employee/Admin Authorization
+ * ************************************ */
+Util.checkAccountType = (req, res, next) => {
+  if (!res.locals.loggedin) {
+    req.flash("notice", "Please log in.")
+    return res.redirect("/account/login")
+  }
+
+  const type = res.locals.accountData?.account_type
+  if (type === "Employee" || type === "Admin") {
+    return next()
+  }
+
+  req.flash("notice", "You do not have permission to access that area.")
+  return res.redirect("/account/login")
 }
 
 module.exports = Util

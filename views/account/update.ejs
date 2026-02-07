@@ -1,0 +1,69 @@
+<%- messages() %>
+
+<h1><%= title %></h1>
+
+<% if (errors && errors.length) { %>
+  <ul class="errors">
+    <% errors.forEach(e => { %>
+      <li><%= e.msg %></li>
+    <% }) %>
+  </ul>
+<% } %>
+
+<section>
+  <h2>Account Update</h2>
+
+  <form action="/account/update" method="post" novalidate>
+    <label for="account_firstname">First Name</label>
+    <input
+      id="account_firstname"
+      name="account_firstname"
+      type="text"
+      required
+      value="<%= typeof account_firstname !== 'undefined' ? account_firstname : accountData.account_firstname %>"
+    >
+
+    <label for="account_lastname">Last Name</label>
+    <input
+      id="account_lastname"
+      name="account_lastname"
+      type="text"
+      required
+      value="<%= typeof account_lastname !== 'undefined' ? account_lastname : accountData.account_lastname %>"
+    >
+
+    <label for="account_email">Email</label>
+    <input
+      id="account_email"
+      name="account_email"
+      type="email"
+      required
+      value="<%= typeof account_email !== 'undefined' ? account_email : accountData.account_email %>"
+    >
+
+    <input type="hidden" name="account_id" value="<%= accountData.account_id %>">
+
+    <input type="submit" value="Update Account">
+  </form>
+</section>
+
+<hr>
+
+<section>
+  <h2>Change Password</h2>
+  <p>Entering a new password will replace your current password. Follow the same password requirements used during registration.</p>
+
+  <form action="/account/update-password" method="post" novalidate>
+    <label for="account_password">New Password</label>
+    <input
+      id="account_password"
+      name="account_password"
+      type="password"
+      required
+    >
+
+    <input type="hidden" name="account_id" value="<%= accountData.account_id %>">
+
+    <input type="submit" value="Change Password">
+  </form>
+</section>

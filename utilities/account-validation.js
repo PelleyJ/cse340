@@ -9,7 +9,6 @@ const validate = {}
  * ********************************* */
 validate.registationRules = () => {
   return [
-    // firstname is required and must be string
     body("account_firstname")
       .trim()
       .escape()
@@ -17,7 +16,6 @@ validate.registationRules = () => {
       .isLength({ min: 1 })
       .withMessage("Please provide a first name."),
 
-    // lastname is required and must be string
     body("account_lastname")
       .trim()
       .escape()
@@ -25,7 +23,6 @@ validate.registationRules = () => {
       .isLength({ min: 2 })
       .withMessage("Please provide a last name."),
 
-    // valid email is required and cannot already exist in the database
     body("account_email")
       .trim()
       .isEmail()
@@ -38,7 +35,6 @@ validate.registationRules = () => {
         }
       }),
 
-    // password is required and must be strong password
     body("account_password")
       .trim()
       .notEmpty()
@@ -80,14 +76,12 @@ validate.checkRegData = async (req, res, next) => {
  * ********************************* */
 validate.loginRules = () => {
   return [
-    // email is required and must be valid
     body("account_email")
       .trim()
       .isEmail()
       .normalizeEmail()
       .withMessage("A valid email is required."),
 
-    // password required and must match strong password rules (same as register)
     body("account_password")
       .trim()
       .notEmpty()
@@ -115,9 +109,122 @@ validate.checkLoginData = async (req, res, next) => {
       errors,
       title: "Login",
       nav,
-      account_email, // sticky email only (never sticky password)
+      account_email,
     })
     return
+  }
+  next()
+}
+
+/*  **********************************
+ *  Account Update Validation Rules
+ * ********************************* */
+validate.updateRules = () => {
+  return [
+    body("account_firstname")
+      .trim()
+      .escape()
+      .notEmpty()
+      .withMessage("Please provide a first name."),
+
+    body("account_lastname")
+      .trim()
+      .escape()
+      .notEmpty()
+      .withMessage("Please provide a last name."),
+
+    body("account_email")
+      .trim()
+      .isEmail()
+      .normalizeEmail()
+      .withMessage("A valid email is required."),
+
+    body("account_id")
+      .trim()
+      .notEmpty()
+      .withMessage("Account ID is missing."),
+  ]
+}
+
+/* ******************************
+ * Check update data + enforce email uniqueness if changed
+ * ***************************** */
+validate.checkUpdateData = async (req, res, next) => {
+  const { account_firstname, account_lastname, account_email, account_id } =
+    req.body
+
+  let nav = await utilities.getNav()
+  let errors = validationResult(req)
+
+  if (!errors.isEmpty()) {
+    return res.render("account/update", {
+      title: "Update Account",
+      nav,
+      errors: errors.array(),
+      account_firstname,
+      account_lastname,
+      account_email,
+    })
+  }
+
+  // If email changed, ensure it's not already used by someone else
+  const current = await accountModel.getAccountById(parseInt(account_id))
+  if (current && current.account_email !== account_email) {
+    const emailExists = await accountModel.checkExistingEmail(account_email)
+    if (emailExists) {
+      req.flash("notice", "Email exists. Please use a different email.")
+      return res.render("account/update", {
+        title: "Update Account",
+        nav,
+        errors: [{ msg: "Email exists. Please use a different email." }],
+        account_firstname,
+        account_lastname,
+        account_email,
+      })
+    }
+  }
+
+  next()
+}
+
+/*  **********************************
+ *  Password Update Rules 
+ * ********************************* */
+validate.passwordRules = () => {
+  return [
+    body("account_password")
+      .trim()
+      .notEmpty()
+      .isStrongPassword({
+        minLength: 12,
+        minLowercase: 1,
+        minUppercase: 1,
+        minNumbers: 1,
+        minSymbols: 1,
+      })
+      .withMessage("Password does not meet requirements."),
+
+    body("account_id")
+      .trim()
+      .notEmpty()
+      .withMessage("Account ID is missing."),
+  ]
+}
+
+/* ******************************
+ * Check password update data
+ * ***************************** */
+validate.checkPasswordData = async (req, res, next) => {
+  let nav = await utilities.getNav()
+  let errors = validationResult(req)
+
+  if (!errors.isEmpty()) {
+    req.flash("notice", "Please correct the password and try again.")
+    return res.status(400).render("account/update", {
+      title: "Update Account",
+      nav,
+      errors: errors.array(),
+    })
   }
   next()
 }

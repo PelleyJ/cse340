@@ -5,7 +5,7 @@ const invController = {}
 
 // Inventory management view
 invController.buildManagement = async function (req, res) {
-  const nav = await utilities.getNav()
+  const nav = await utilities.getNav(req, res)
   const classificationSelect = await utilities.buildClassificationList()
 
   res.render("inventory/management", {
@@ -18,7 +18,7 @@ invController.buildManagement = async function (req, res) {
 
 // Add classification view
 invController.buildAddClassification = async function (req, res) {
-  const nav = await utilities.getNav()
+  const nav = await utilities.getNav(req, res)
   res.render("inventory/add-classification", {
     title: "Add Classification",
     nav,
@@ -29,14 +29,14 @@ invController.buildAddClassification = async function (req, res) {
 
 // Process add classification
 invController.addClassification = async function (req, res) {
-  const nav = await utilities.getNav()
+  const nav = await utilities.getNav(req, res)
   const { classification_name } = req.body
 
   const result = await invModel.addClassification(classification_name)
 
   if (result) {
     req.flash("notice", "Classification added successfully.")
-    const updatedNav = await utilities.getNav()
+    const updatedNav = await utilities.getNav(req, res)
 
     // Rebuild select for management view after adding a classification
     const classificationSelect = await utilities.buildClassificationList()
@@ -60,7 +60,7 @@ invController.addClassification = async function (req, res) {
 
 // Add inventory view
 invController.buildAddInventory = async function (req, res) {
-  const nav = await utilities.getNav()
+  const nav = await utilities.getNav(req, res)
   const classificationList = await utilities.buildClassificationList()
 
   res.render("inventory/add-inventory", {
@@ -84,7 +84,7 @@ invController.buildAddInventory = async function (req, res) {
 
 // Process add inventory
 invController.addInventory = async function (req, res) {
-  const nav = await utilities.getNav()
+  const nav = await utilities.getNav(req, res)
   const classificationList = await utilities.buildClassificationList(
     req.body.classification_id
   )
@@ -93,7 +93,7 @@ invController.addInventory = async function (req, res) {
 
   if (result) {
     req.flash("notice", "Inventory item added successfully.")
-    const updatedNav = await utilities.getNav()
+    const updatedNav = await utilities.getNav(req, res)
 
     // Rebuild select for management view after adding inventory
     const classificationSelect = await utilities.buildClassificationList()
@@ -139,7 +139,7 @@ invController.buildByClassificationId = async function (req, res) {
   }
 
   const grid = await utilities.buildClassificationGrid(data)
-  const nav = await utilities.getNav()
+  const nav = await utilities.getNav(req, res)
   const className = data[0].classification_name
 
   res.render("inventory/classification", {
@@ -161,7 +161,7 @@ invController.buildByInventoryId = async function (req, res) {
   }
 
   const detail = await utilities.buildVehicleDetail(data)
-  const nav = await utilities.getNav()
+  const nav = await utilities.getNav(req, res)
 
   res.render("inventory/detail", {
     title: `${data.inv_make} ${data.inv_model}`,
@@ -175,7 +175,9 @@ invController.buildByInventoryId = async function (req, res) {
  * ************************** */
 invController.getInventoryJSON = async (req, res, next) => {
   const classification_id = parseInt(req.params.classification_id)
-  const invData = await invModel.getInventoryByClassificationId(classification_id)
+  const invData = await invModel.getInventoryByClassificationId(
+    classification_id
+  )
 
   if (invData && invData.length > 0 && invData[0].inv_id) {
     return res.json(invData)
@@ -189,7 +191,7 @@ invController.getInventoryJSON = async (req, res, next) => {
  * ************************** */
 invController.editInventoryView = async function (req, res, next) {
   const inv_id = parseInt(req.params.inv_id)
-  const nav = await utilities.getNav()
+  const nav = await utilities.getNav(req, res)
 
   const itemData = await invModel.getInventoryById(inv_id)
 
@@ -229,7 +231,7 @@ invController.editInventoryView = async function (req, res, next) {
  *  Update Inventory Data (Step 2)
  * ************************** */
 invController.updateInventory = async function (req, res, next) {
-  const nav = await utilities.getNav()
+  const nav = await utilities.getNav(req, res)
 
   const {
     inv_id,
@@ -295,7 +297,7 @@ invController.updateInventory = async function (req, res, next) {
  * ************************** */
 invController.buildDeleteConfirm = async function (req, res, next) {
   const inv_id = parseInt(req.params.inv_id)
-  const nav = await utilities.getNav()
+  const nav = await utilities.getNav(req, res)
 
   const itemData = await invModel.getInventoryById(inv_id)
 

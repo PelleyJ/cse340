@@ -26,6 +26,38 @@ router.get(
   utilities.handleErrors(accountController.buildAccountManagement)
 )
 
+// Deliver update account view (PROTECTED)
+router.get(
+  "/update/:account_id",
+  utilities.checkLogin,
+  utilities.handleErrors(accountController.buildUpdateAccount)
+)
+
+// Process account info update (PROTECTED)
+router.post(
+  "/update",
+  utilities.checkLogin,
+  regValidate.updateRules(),
+  regValidate.checkUpdateData,
+  utilities.handleErrors(accountController.updateAccount)
+)
+
+// Process password change (PROTECTED)
+router.post(
+  "/update-password",
+  utilities.checkLogin,
+  regValidate.passwordRules(),
+  regValidate.checkPasswordData,
+  utilities.handleErrors(accountController.updatePassword)
+)
+
+// Logout (PROTECTED)
+router.get(
+  "/logout",
+  utilities.checkLogin,
+  utilities.handleErrors(accountController.logout)
+)
+
 // Process the login request
 router.post(
   "/login",
@@ -35,4 +67,3 @@ router.post(
 )
 
 module.exports = router
-
