@@ -243,7 +243,7 @@ VALUES
     5
   );
 
--- ---------- TASK 1 #4: Update "GM Hummer" description ----------
+-- ---------- Update "GM Hummer" description ----------
 UPDATE public.inventory
 SET inv_description = REPLACE(inv_description, 'small interiors', 'a huge interior')
 WHERE inv_id = (
@@ -252,8 +252,16 @@ WHERE inv_id = (
   WHERE inv_make = 'GM' AND inv_model = 'Hummer'
 );
 
--- ---------- TASK 1 #6: Add "/vehicles" into the middle of image paths ----------
+-- ---------- Add "/vehicles" into the middle of image paths ----------
 UPDATE public.inventory
 SET
   inv_image = REPLACE(inv_image, '/images/', '/images/vehicles/'),
   inv_thumbnail = REPLACE(inv_thumbnail, '/images/', '/images/vehicles/');
+
+  CREATE TABLE IF NOT EXISTS public.watchlist (
+  watchlist_id SERIAL PRIMARY KEY,
+  account_id INT NOT NULL REFERENCES public.account(account_id) ON DELETE CASCADE,
+  inv_id INT NOT NULL REFERENCES public.inventory(inv_id) ON DELETE CASCADE,
+  created_at TIMESTAMP DEFAULT NOW(),
+  UNIQUE (account_id, inv_id)
+);

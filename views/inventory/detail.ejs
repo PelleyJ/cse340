@@ -1,4 +1,11 @@
 <section class="content">
   <h1><%= title %></h1>
   <%- detail %>
+
+  <% if (locals.loggedin) { %>
+    <form action="/account/watchlist/add" method="post">
+      <input type="hidden" name="inv_id" value="<%= inv_id %>">
+      <button type="submit">Save to Watchlist</button>
+    </form>
+  <% } %>
 </section>

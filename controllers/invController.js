@@ -163,10 +163,12 @@ invController.buildByInventoryId = async function (req, res) {
   const detail = await utilities.buildVehicleDetail(data)
   const nav = await utilities.getNav(req, res)
 
+  // pass inv_id so details.ejs can use it for watchlist form
   res.render("inventory/detail", {
     title: `${data.inv_make} ${data.inv_model}`,
     nav,
     detail,
+    inv_id: data.inv_id,
   })
 }
 
@@ -228,7 +230,7 @@ invController.editInventoryView = async function (req, res, next) {
 }
 
 /* ***************************
- *  Update Inventory Data (Step 2)
+ *  Inventory Data
  * ************************** */
 invController.updateInventory = async function (req, res, next) {
   const nav = await utilities.getNav(req, res)

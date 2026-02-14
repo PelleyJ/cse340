@@ -1,0 +1,22 @@
+<%- messages() %>
+<h1><%= title %></h1>
+
+<% if (!items || items.length === 0) { %>
+  <p>You have no saved vehicles yet.</p>
+<% } else { %>
+  <ul class="watchlist">
+    <% items.forEach(item => { %>
+      <li class="watchlist-item">
+        <a href="/inv/detail/<%= item.inv_id %>">
+          <strong><%= item.inv_year %> <%= item.inv_make %> <%= item.inv_model %></strong>
+        </a>
+        <span>$<%= new Intl.NumberFormat("en-US").format(item.inv_price) %></span>
+
+        <form action="/account/watchlist/remove" method="post">
+          <input type="hidden" name="inv_id" value="<%= item.inv_id %>">
+          <button type="submit">Remove</button>
+        </form>
+      </li>
+    <% }) %>
+  </ul>
+<% } %>

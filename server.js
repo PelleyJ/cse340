@@ -1,7 +1,7 @@
 /* ******************************************
  * This server.js file is the primary file of the
  * application. It is used to control the project.
- * ***************************************** */
+ * *******************************************/
 
 /* ***********************
  * Require Statements
@@ -18,11 +18,16 @@ const utilities = require("./utilities/")
 
 const app = express()
 
-// Routes
+/* ***********************
+ * Routes
+ * *********************** */
 const staticRoutes = require("./routes/static")
 const baseController = require("./controllers/baseController")
 const inventoryRoute = require("./routes/inventoryRoute")
 const accountRoute = require("./routes/accountRoute")
+
+// Watchlist routes
+const watchlistRoute = require("./routes/watchlistRoute")
 
 /* ***********************
  * Middleware
@@ -34,8 +39,8 @@ app.use(
       pool,
     }),
     secret: process.env.SESSION_SECRET,
-    resave: true,
-    saveUninitialized: true,
+    resave: false,
+    saveUninitialized: false,
     name: "sessionId",
   })
 )
@@ -49,7 +54,7 @@ app.use(function (req, res, next) {
 
 // Body Parser Middleware
 app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: true }))
 
 // Cookie Parser Middleware
 app.use(cookieParser())
@@ -62,7 +67,7 @@ app.use(utilities.checkJWTToken)
  * *********************** */
 app.set("view engine", "ejs")
 app.use(expressLayouts)
-app.set("layout", "./layouts/layout") // not at views root
+app.set("layout", "./layouts/layout")
 
 /* ***********************
  * Routes
@@ -78,9 +83,11 @@ app.use("/inv", inventoryRoute)
 // Account routes
 app.use("/account", accountRoute)
 
+// Watchlist routes (must come AFTER account middleware)
+app.use("/account/watchlist", watchlistRoute)
+
 /* ***********************
  * 404 Handler (must be AFTER all routes)
- * (Send to error handler middleware)
  * *********************** */
 app.use((req, res, next) => {
   const err = new Error("Sorry, we couldn’t find that page.")
@@ -89,14 +96,13 @@ app.use((req, res, next) => {
 })
 
 /* ***********************
- * Express Error Handler (must have 4 params)
- * Adds nav so layout/partials don't crash
+ * Express Error Handler
  * *********************** */
 app.use(async (err, req, res, next) => {
   console.error(err)
 
   try {
-    const nav = await utilities.getNav()
+    const nav = await utilities.getNav(req, res)
 
     res.status(err.status || 500).render("errors/error", {
       title: err.status ? `${err.status} Error` : "500 - Server Error",
@@ -110,7 +116,6 @@ app.use(async (err, req, res, next) => {
 
 /* ***********************
  * Local Server Information
- * Values from .env (environment) file
  * *********************** */
 const port = process.env.PORT
 const host = process.env.HOST
